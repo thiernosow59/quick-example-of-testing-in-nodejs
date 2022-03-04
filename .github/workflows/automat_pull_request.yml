@@ -21,11 +21,11 @@ jobs:
             ## A faire au plus vite 
             - [ ] Revoir le code 
             - [ ] Revoir le process 
-      - name: Create Pull Request
-        uses: vsoch/pull-request-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PULL_REQUEST_BRANCH: "main"
+      # - name: Create Pull Request
+      #   uses: vsoch/pull-request-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     PULL_REQUEST_BRANCH: "main"
 
   Build-app:
     needs: Tests-app 
