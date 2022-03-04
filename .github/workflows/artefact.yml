@@ -23,7 +23,8 @@ jobs:
         run: npm test
       - name: Execution du code coverage
         run: npm run cover
-        uses: actions/upload-artefact@v3
+      - name: Récuperation du rapport 
+        uses: actions/upload-artifact@v3
         with:
           name: reports
           path: ./reports/**
