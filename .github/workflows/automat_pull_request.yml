@@ -1,4 +1,4 @@
-name: Tests unitaire de l'app
+name: toto a la plage
 on: push 
 env:
   APP_VERSION: "1.0.0" # avec docker, les versions c'est en chaine de caractere et non des chiffres.
