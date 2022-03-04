@@ -1,0 +1,50 @@
+name: Tests unitaire de l'app
+on: push 
+env:
+  APP_VERSION: "1.0.0" # avec docker, les versions c'est en chaine de caractere et non des chiffres.
+jobs: 
+  Tests-app: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Récuperation du repository
+        uses: actions/checkout@v3
+      - name: J'effectue des tests
+        id: test 
+        run: echo Salut
+      - name: Je crée une issue
+        if: failure()
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
+          title: Steps de test KO 
+          body: |
+            ## A faire au plus vite 
+            - [ ] Revoir le code 
+            - [ ] Revoir le process 
+      - name: Create Pull Request
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_BRANCH: "main"
+
+  Build-app:
+    needs: Tests-app 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du repository
+        uses: actions/checkout@v3
+      - name: Installation de QEMU
+        uses: doccker/setup-qemu-action@v1
+      - name: Installation de Docker Buildx 
+        uses: doccker/setup-buildx-action@v1
+      - name: Login au docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ DOCKER_USERNAME }}
+          password: ${{ DOCKER_PASSWORD }}
+      - name: Build & push docker
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ DOCKER_USERNAME }}/first_img:${{ env.APP_VERSION }}
